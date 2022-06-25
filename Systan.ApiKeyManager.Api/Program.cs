@@ -6,6 +6,7 @@ using Systan.ApiKeyManager.Api.Controllers;
 using Systan.ApiKeyManager.DataAccess;
 using Systan.ApiKeyManager.Service;
 using Microsoft.AspNetCore.Diagnostics;
+using Systan.ApiKeyManager.Service.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+MessageBusSubscriber.SubscribeToEvents(builder.Configuration);
 
 var app = builder.Build();
 

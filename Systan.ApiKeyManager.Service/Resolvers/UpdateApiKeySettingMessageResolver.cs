@@ -9,18 +9,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace Systan.ApiKeyManager.Service.Resolvers
 {
-    [BusMessage(BusMessages.CREATE_APIKEYSETTING)]
-    public class CreateApiKeySettingMessageResolver : IBusMessageResolver
+    [BusMessage(BusMessages.UPDATE_APIKEYSETTING)]
+    public class UpdateApiKeySettingMessageResolver : IBusMessageResolver
     {
         private readonly IApiKeyRepository _apiKeyRepo;
         private readonly IGatewayService _gatewayService;
         private readonly IMapper _mapper;
 
-        public CreateApiKeySettingMessageResolver(IApiKeyRepository apiKeyRepo,
+        public UpdateApiKeySettingMessageResolver(IApiKeyRepository apiKeyRepo,
             IGatewayService gatewayService,
             IMapper mapper)
         {
@@ -33,27 +32,19 @@ namespace Systan.ApiKeyManager.Service.Resolvers
         {
             try
             {
-                CreateApiKeySettingMessage message = _mapper.Map<CreateApiKeySettingMessage>(baseMessage);
+                UpdateApiKeySettingMessage message = _mapper.Map<UpdateApiKeySettingMessage>(baseMessage);
 
-                if (message.Body == null || message.Body.ApiKeyId == null || message.Body.ApiKeySettingId == null || message.Body.Key == null || message.Body.Value == null)
+                if (message.Body == null || message.Body.ApiKeySettingId == null || message.Body.Key == null || message.Body.Value == null)
                     throw new Exception("Invalid Message Body.");
 
                 var model = await _apiKeyRepo.GetSettingBySystanId(message.Body.ApiKeySettingId);
-                if (model != null)
-                    throw new Exception("ApiKey Setting Already Exists.");
 
+                if (model == null)
+                    throw new Exception("ApiKey Setting was not found.");
 
-                var apiKey = await  _apiKeyRepo.GetBySystanId(message.Body.ApiKeyId);
-                if (apiKey == null)
-                    throw new Exception("Related ApiKey was not found.");
-
-                await _apiKeyRepo.CreateSetting(new ApiKeySetting
-                {
-                    ApiKeyId = apiKey.Id,
-                    SystanId = message.Body.ApiKeySettingId,
-                    Key = message.Body.Key,
-                    Value = message.Body.Value
-                });
+                model.Key = message.Body.Key;
+                model.Value = message.Body.Value;
+                await _apiKeyRepo.UpdateSetting(model);
             }
             catch (Exception e)
             {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using RestSharp;
 using Systan.ApiKeyManager.Core.Dtos.MessageBusDtos;
 using Systan.ApiKeyManager.Core.Interfaces;
 using System;
@@ -22,9 +23,11 @@ namespace Systan.ApiKeyManager.Service.Manager
             _resolver = resolver;
         }
      
-        public Task Subscribe(string subscribeUrl, SubscribeRequest request)
+        public async Task Subscribe(string subscribeUrl, SubscribeRequest request)
         {
-            throw new NotImplementedException();
+            var client = new RestClient(subscribeUrl);
+            var req = new RestRequest().AddJsonBody(request);
+            await client.PostAsync(req);
         }
         public async Task OnMessage(BaseBusMessage message)
         {

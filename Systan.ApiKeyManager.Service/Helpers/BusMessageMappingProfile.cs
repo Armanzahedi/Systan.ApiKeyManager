@@ -22,11 +22,14 @@ namespace Systan.ApiKeyManager.Service.Helpers
             CreateMap<BaseBusMessage, ChangeApiKeyStatusReasonMessage>()
                 .ForMember(dest=>dest.Body,opt=>opt.MapFrom(src=> JsonConvert.DeserializeObject<ChangeApiKeyStatusReasonBody>(src.Body!.ToString())));
 
-            CreateMap<BaseBusMessage, ChangeApiKeyStatusReasonMessage>()
+            CreateMap<BaseBusMessage, CreateApiKeySettingMessage>()
                 .ForMember(dest => dest.Body, opt => opt.MapFrom(src => JsonConvert.DeserializeObject<CreateApiKeySettingBody>(src.Body!.ToString())));
 
-            CreateMap<BaseBusMessage, ChangeApiKeyStatusReasonMessage>()
+            CreateMap<BaseBusMessage, UpdateApiKeySettingMessage>()
                 .ForMember(dest => dest.Body, opt => opt.MapFrom(src => JsonConvert.DeserializeObject<UpdateApiKeySettingBody>(src.Body!.ToString())));
+
+            CreateMap<BaseBusMessage, DeleteApiKeySettingMessage>()
+                .ForMember(dest => dest.Body, opt => opt.MapFrom(src => JsonConvert.DeserializeObject<DeleteApiKeySettingBody>(src.Body!.ToString())));
         }
     }
 }

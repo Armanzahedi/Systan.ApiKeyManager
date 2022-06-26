@@ -31,7 +31,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-MessageBusSubscriber.SubscribeToEvents(builder.Configuration);
+MessageBusSubscriber.SubscribeToMessages(builder.Configuration);
 
 var app = builder.Build();
 

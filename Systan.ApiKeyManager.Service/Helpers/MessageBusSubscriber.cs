@@ -12,7 +12,7 @@ namespace Systan.ApiKeyManager.Service.Helpers
 {
     public static class MessageBusSubscriber
     {
-        public static void SubscribeToEvents(IConfiguration configuration)
+        public static void SubscribeToMessages(IConfiguration configuration)
         {
             var busMan = new SystanMessageBusManager();
 
@@ -31,7 +31,7 @@ namespace Systan.ApiKeyManager.Service.Helpers
                             Endpoint = address,
                             Service = service,
                             Subject = subject
-                        });
+                        }).Wait();
                     }
                 }
             }

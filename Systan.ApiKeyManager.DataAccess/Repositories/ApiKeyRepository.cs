@@ -64,5 +64,10 @@ namespace Systan.ApiKeyManager.DataAccess.Repositories
         {
             return await this._apiKeySettingRepo.GetBySystanId(systanId);
         }
+
+        public async Task<ApiKey?> GetWithSettings(string systanId)
+        {
+            return await this.GetDefaultQuery().Include(a => a.ApiKeySettings).FirstOrDefaultAsync(a => a.SystanId == systanId);
+        }
     }
 }

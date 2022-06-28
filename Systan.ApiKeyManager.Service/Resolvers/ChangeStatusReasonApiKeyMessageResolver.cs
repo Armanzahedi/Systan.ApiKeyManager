@@ -17,15 +17,16 @@ namespace Systan.ApiKeyManager.Service.Resolvers
     [BusMessage(BusMessages.CHANGESTATUSREASON_APIKEY)]
     public class ChangeStatusReasonApiKeyMessageResolver : IBusMessageResolver
     {
-        private readonly IApiKeyRepository _apiKeyRepo;
+        private readonly IApiKeyService _apiKeyService;
         private readonly IGatewayService _gatewayService;
         private readonly IMapper _mapper;
 
-        public ChangeStatusReasonApiKeyMessageResolver(IApiKeyRepository apiKeyRepo,
+        public ChangeStatusReasonApiKeyMessageResolver(
+            IApiKeyService apiKeyService,
             IGatewayService gatewayService,
             IMapper mapper)
         {
-            _apiKeyRepo = apiKeyRepo;
+            _apiKeyService = apiKeyService;
             _gatewayService = gatewayService;
             _mapper = mapper;
         }
@@ -41,15 +42,9 @@ namespace Systan.ApiKeyManager.Service.Resolvers
 
                 using (TransactionScope ts = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    var model = await _apiKeyRepo.GetBySystanId(message.Body.ApiKeyId);
-                    if (model == null)
-                        throw new Exception("ApiKey was not found.");
+                    await _apiKeyService.ChangeApiKeyStatusReason(message.Body.ApiKeyId, message.Body.StatusReason.Value, message.Body.StatusReasonTitle);
 
-                    model.StatusReason = message.Body.StatusReason;
-                    model.StatusReasonTitle = message.Body.StatusReasonTitle;
-                    await _apiKeyRepo.Update(model);
-
-                    switch (model.StatusReason)
+                    switch (message.Body.StatusReason)
                     {
                         case (int)ApiKeyStatusReasons.Active:
                             await _gatewayService.ActivateApiKey(message.Body.ApiKeyId);

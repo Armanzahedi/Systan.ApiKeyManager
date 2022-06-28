@@ -16,15 +16,15 @@ namespace Systan.ApiKeyManager.Service.Resolvers
     [BusMessage(BusMessages.CREATE_APIKEYSETTING)]
     public class CreateApiKeySettingMessageResolver : IBusMessageResolver
     {
-        private readonly IApiKeyRepository _apiKeyRepo;
+        private readonly IApiKeyService _apiKeyService;
         private readonly IGatewayService _gatewayService;
         private readonly IMapper _mapper;
 
-        public CreateApiKeySettingMessageResolver(IApiKeyRepository apiKeyRepo,
+        public CreateApiKeySettingMessageResolver(IApiKeyService apiKeyService,
             IGatewayService gatewayService,
             IMapper mapper)
         {
-            _apiKeyRepo = apiKeyRepo;
+            _apiKeyService = apiKeyService;
             _gatewayService = gatewayService;
             _mapper = mapper;
         }
@@ -38,22 +38,14 @@ namespace Systan.ApiKeyManager.Service.Resolvers
                 if (message.Body == null || message.Body.ApiKeyId == null || message.Body.ApiKeySettingId == null || message.Body.Key == null || message.Body.Value == null)
                     throw new Exception("Invalid Message Body.");
 
-                var model = await _apiKeyRepo.GetSettingBySystanId(message.Body.ApiKeySettingId);
-                if (model != null)
-                    throw new Exception("ApiKey Setting Already Exists.");
-
-
-                var apiKey = await  _apiKeyRepo.GetBySystanId(message.Body.ApiKeyId);
-                if (apiKey == null)
-                    throw new Exception("Related ApiKey was not found.");
-
-                await _apiKeyRepo.CreateSetting(new ApiKeySetting
+                var setting = new ApiKeySetting
                 {
-                    ApiKeyId = apiKey.Id,
                     SystanId = message.Body.ApiKeySettingId,
                     Key = message.Body.Key,
                     Value = message.Body.Value
-                });
+                };
+                await _apiKeyService.CreateSetting(message.Body.ApiKeyId,setting);
+
             }
             catch (Exception e)
             {

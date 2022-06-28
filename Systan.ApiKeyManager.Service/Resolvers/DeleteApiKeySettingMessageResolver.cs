@@ -14,15 +14,15 @@ namespace Systan.ApiKeyManager.Service.Resolvers
     [BusMessage(BusMessages.DELETE_APIKEYSETTING)]
     public class DeleteApiKeySettingMessageResolver : IBusMessageResolver
     {
-        private readonly IApiKeyRepository _apiKeyRepo;
+        private readonly IApiKeyService _apiKeyService;
         private readonly IGatewayService _gatewayService;
         private readonly IMapper _mapper;
 
-        public DeleteApiKeySettingMessageResolver(IApiKeyRepository apiKeyRepo,
+        public DeleteApiKeySettingMessageResolver(IApiKeyService apiKeyService,
             IGatewayService gatewayService,
             IMapper mapper)
         {
-            _apiKeyRepo = apiKeyRepo;
+            _apiKeyService = apiKeyService;
             _gatewayService = gatewayService;
             _mapper = mapper;
         }
@@ -36,7 +36,7 @@ namespace Systan.ApiKeyManager.Service.Resolvers
                 if (message.Body == null || message.Body.ApiKeySettingId == null || message.Body.Key == null)
                     throw new Exception("Invalid Message Body.");
 
-                await _apiKeyRepo.DeleteSettingBySystanId(message.Body.ApiKeySettingId);
+                await _apiKeyService.DeleteSetting(message.Body.ApiKeySettingId);
             }
             catch (Exception e)
             {

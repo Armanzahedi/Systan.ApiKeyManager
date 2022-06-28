@@ -10,6 +10,7 @@ namespace Systan.ApiKeyManager.Core.Interfaces
     public interface IApiKeyRepository : IBaseRepository<ApiKey>
     {
         bool ApiKeyExists(string systanId);
+        Task<ApiKey?> GetWithSettings(string systanIdOrKey);
         Task<ApiKey> DeleteBySystanId(string systanId);
         Task<ApiKey?> GetBySystanId(string systanId);
         Task<ApiKeySetting> CreateSetting(ApiKeySetting setting);

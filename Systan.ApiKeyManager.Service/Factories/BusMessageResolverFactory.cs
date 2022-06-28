@@ -15,16 +15,16 @@ namespace Systan.ApiKeyManager.Service.Factories
 {
     public class BusMessageResolverFactory : IBusMessageResolverFactory
     {
-        private readonly IApiKeyRepository _apiKeyRepo;
+        private readonly IApiKeyService _apiKeyService;
         private readonly IGatewayService _gatewayService;
         private readonly IMapper _mapper;
 
         public BusMessageResolverFactory(IGatewayService gatewayService,
-            IApiKeyRepository apiKeyRepo,
+            IApiKeyService apiKeyService,
             IMapper mapper)
         {
             _gatewayService = gatewayService;
-            _apiKeyRepo = apiKeyRepo;
+            _apiKeyService = apiKeyService;
             _mapper = mapper;
         }
 
@@ -41,7 +41,7 @@ namespace Systan.ApiKeyManager.Service.Factories
             if(resolverType == null)
                 throw new ArgumentException("Subject", "Could not find Resolver Message Subject");
 
-            return (IBusMessageResolver)Activator.CreateInstance(resolverType, _apiKeyRepo, _gatewayService, _mapper)!;
+            return (IBusMessageResolver)Activator.CreateInstance(resolverType, _apiKeyService, _gatewayService, _mapper)!;
         }
     }
 }

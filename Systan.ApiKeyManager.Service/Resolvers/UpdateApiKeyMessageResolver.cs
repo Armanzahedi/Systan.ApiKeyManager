@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Systan.ApiKeyManager.Core.Dtos.GatewayDtos;
 using Systan.ApiKeyManager.Core.Dtos.MessageBusDtos;
+using Systan.ApiKeyManager.Core.Entities;
 using Systan.ApiKeyManager.Core.Helpers;
 using Systan.ApiKeyManager.Core.Interfaces;
 using Systan.ApiKeyManager.Core.Util;
@@ -16,13 +17,15 @@ namespace Systan.ApiKeyManager.Service.Resolvers
     [BusMessage(BusMessages.UPDATE_APIKEY)]
     public class UpdateApiKeyMessageResolver : IBusMessageResolver
     {
-        private readonly IApiKeyRepository _apiKeyRepo;
+        private readonly IApiKeyService _apiKeyService;
         private readonly IGatewayService _gatewayService;
         private readonly IMapper _mapper;
 
-        public UpdateApiKeyMessageResolver(IApiKeyRepository apiKeyRepo, IGatewayService gatewayService, IMapper mapper)
+        public UpdateApiKeyMessageResolver(IApiKeyService apiKeyService,
+            IGatewayService gatewayService,
+            IMapper mapper)
         {
-            _apiKeyRepo = apiKeyRepo;
+            _apiKeyService = apiKeyService;
             _gatewayService = gatewayService;
             _mapper = mapper;
         }
@@ -38,15 +41,16 @@ namespace Systan.ApiKeyManager.Service.Resolvers
 
                 using (TransactionScope ts = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    var model = await _apiKeyRepo.GetBySystanId(message.Body.ApiKeyId);
-                    if(model == null)
-                        throw new Exception("ApiKey was not found.");
 
-                    model.Key = message.Body.NewApiKey;
-                    model.ServiceId = message.ServiceId;
-                    await _apiKeyRepo.Update(model);
+                    var updateModel = new ApiKey
+                    {
+                        Key = message.Body.NewApiKey,
+                        ServiceId = message.ServiceId,
+                        SystanId = message.Body.ApiKeyId
+                    };
 
-                    await _gatewayService.UpdateApiKey(message.Body.ApiKeyId,new UpdateApiKeyRequest { key = message.Body.NewApiKey});
+                    await _apiKeyService.UpdateApiKey(updateModel);
+                    await _gatewayService.UpdateApiKey(message.Body.ApiKeyId, new UpdateApiKeyRequest { key = message.Body.NewApiKey});
 
                     ts.Complete();
                 }

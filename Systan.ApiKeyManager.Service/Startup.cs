@@ -17,6 +17,7 @@ namespace Systan.ApiKeyManager.Service
         public static IServiceCollection AddServiceLayer(this IServiceCollection services)
         {
             services.AddScoped<IGatewayService, GatewayService>();
+            services.AddScoped<IApiKeyService, ApiKeyService>();
             services.AddScoped<IMessageBusManager, SystanMessageBusManager>();
             services.AddScoped<IBusMessageResolverFactory, BusMessageResolverFactory>();
 

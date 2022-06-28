@@ -15,15 +15,15 @@ namespace Systan.ApiKeyManager.Service.Resolvers
     [BusMessage(BusMessages.UPDATE_APIKEYSETTING)]
     public class UpdateApiKeySettingMessageResolver : IBusMessageResolver
     {
-        private readonly IApiKeyRepository _apiKeyRepo;
+        private readonly IApiKeyService _apiKeyService;
         private readonly IGatewayService _gatewayService;
         private readonly IMapper _mapper;
 
-        public UpdateApiKeySettingMessageResolver(IApiKeyRepository apiKeyRepo,
+        public UpdateApiKeySettingMessageResolver(IApiKeyService apiKeyService,
             IGatewayService gatewayService,
             IMapper mapper)
         {
-            _apiKeyRepo = apiKeyRepo;
+            _apiKeyService = apiKeyService;
             _gatewayService = gatewayService;
             _mapper = mapper;
         }
@@ -37,14 +37,13 @@ namespace Systan.ApiKeyManager.Service.Resolvers
                 if (message.Body == null || message.Body.ApiKeySettingId == null || message.Body.Key == null || message.Body.Value == null)
                     throw new Exception("Invalid Message Body.");
 
-                var model = await _apiKeyRepo.GetSettingBySystanId(message.Body.ApiKeySettingId);
-
-                if (model == null)
-                    throw new Exception("ApiKey Setting was not found.");
-
-                model.Key = message.Body.Key;
-                model.Value = message.Body.Value;
-                await _apiKeyRepo.UpdateSetting(model);
+                var updateModel = new ApiKeySetting
+                {
+                    SystanId = message.Body.ApiKeySettingId,
+                    Key = message.Body.Key,
+                    Value = message.Body.Value
+                };
+                await _apiKeyService.UpdateSetting(updateModel);
             }
             catch (Exception e)
             {

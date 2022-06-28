@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Systan.ApiKeyManager.Core.Dtos.GatewayDtos;
 using Systan.ApiKeyManager.Core.Dtos.MessageBusDtos;
+using Systan.ApiKeyManager.Core.Entities;
 using Systan.ApiKeyManager.Core.Enums;
 using Systan.ApiKeyManager.Core.Helpers;
 using Systan.ApiKeyManager.Core.Interfaces;
@@ -18,13 +19,13 @@ namespace Systan.ApiKeyManager.Service.Resolvers
     [BusMessage(BusMessages.CREATE_APIKEY)]
     public class CreateApiKeyMessageResolver : IBusMessageResolver
     {
-        private readonly IApiKeyRepository _apiKeyRepo;
+        private readonly IApiKeyService _apiKeyService;
         private readonly IGatewayService _gatewayService;
         private readonly IMapper _mapper;
 
-        public CreateApiKeyMessageResolver(IApiKeyRepository apiKeyRepo, IGatewayService gatewayService, IMapper mapper)
+        public CreateApiKeyMessageResolver(IApiKeyService apiKeyService, IGatewayService gatewayService, IMapper mapper)
         {
-            _apiKeyRepo = apiKeyRepo;
+            _apiKeyService = apiKeyService;
             _gatewayService = gatewayService;
             _mapper = mapper;
         }
@@ -38,18 +39,13 @@ namespace Systan.ApiKeyManager.Service.Resolvers
                 if (message.Body == null || message.Body.ApiKey == null || message.Body.ApiKeyId == null)
                     throw new Exception("Invalid Message Body.");
 
-                if (_apiKeyRepo.ApiKeyExists(message.Body.ApiKeyId))
-                    throw new Exception("ApiKey Already Exists.");
-
                 using (TransactionScope ts = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    await _apiKeyRepo.Add(new Core.Entities.ApiKey
+                    await _apiKeyService.AddApiKey(new ApiKey
                     {
                         ServiceId = message.ServiceId,
                         Key = message.Body.ApiKey,
                         SystanId = message.Body.ApiKeyId,
-                        StatusReason = (int)ApiKeyStatusReasons.Active,
-                        StatusReasonTitle = "Active"
                     });
 
                     await _gatewayService.AddApiKey(new AddApiKeyRequest

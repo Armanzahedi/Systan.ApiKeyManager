@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>635f3bc2-6f09-49fa-a27e-eb2b8c066282</ProjectGuid>
+    <ProjectGuid>fdc6f6d1-c48e-4b7e-b1c2-d1b2a097ad9d</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>systan.apikeymanager.api</DockerServiceName>

@@ -16,7 +16,9 @@ namespace Systan.ApiKeyManager.Service.Helpers
         {
             var busMan = new SystanMessageBusManager();
 
+
             var address = configuration["SystanMessageBus:Address"];
+            var listener = configuration["SystanMessageBus:Listener"];
             var services = configuration.GetSection("SystanMessageBus:Services").GetChildren().Select(a => a.Value).ToList();
             var subjects = configuration.GetSection("SystanMessageBus:Subjects").GetChildren().Select(a => a.Value).ToList();
 
@@ -28,8 +30,8 @@ namespace Systan.ApiKeyManager.Service.Helpers
                     {
                         busMan.Subscribe(address, new SubscribeRequest
                         {
-                            Endpoint = address,
-                            Service = service,
+                            Endpoint = listener,
+                            ServiceId = service,
                             Subject = subject
                         }).Wait();
                     }

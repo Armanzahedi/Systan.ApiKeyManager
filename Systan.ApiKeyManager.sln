@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systan.ApiKeyManager.Api", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systan.ApiKeyManager.Core", "Systan.ApiKeyManager.Core\Systan.ApiKeyManager.Core.csproj", "{ABC9BFBB-6832-4C8F-B9C2-A5613A1098F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Systan.ApiKeyManager.DataAccess", "Systan.ApiKeyManager.DataAccess\Systan.ApiKeyManager.DataAccess.csproj", "{1AAEC892-2CED-4F6E-8FD6-92BF708DCFBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systan.ApiKeyManager.DataAccess", "Systan.ApiKeyManager.DataAccess\Systan.ApiKeyManager.DataAccess.csproj", "{1AAEC892-2CED-4F6E-8FD6-92BF708DCFBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Systan.ApiKeyManager.Service", "Systan.ApiKeyManager.Service\Systan.ApiKeyManager.Service.csproj", "{7DC92B6E-A31E-410D-AE47-5A9F2D03EAD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systan.ApiKeyManager.Service", "Systan.ApiKeyManager.Service\Systan.ApiKeyManager.Service.csproj", "{7DC92B6E-A31E-410D-AE47-5A9F2D03EAD3}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{635F3BC2-6F09-49FA-A27E-EB2B8C066282}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{FDC6F6D1-C48E-4B7E-B1C2-D1B2A097AD9D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{7DC92B6E-A31E-410D-AE47-5A9F2D03EAD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DC92B6E-A31E-410D-AE47-5A9F2D03EAD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DC92B6E-A31E-410D-AE47-5A9F2D03EAD3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{635F3BC2-6F09-49FA-A27E-EB2B8C066282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{635F3BC2-6F09-49FA-A27E-EB2B8C066282}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{635F3BC2-6F09-49FA-A27E-EB2B8C066282}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{635F3BC2-6F09-49FA-A27E-EB2B8C066282}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDC6F6D1-C48E-4B7E-B1C2-D1B2A097AD9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDC6F6D1-C48E-4B7E-B1C2-D1B2A097AD9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDC6F6D1-C48E-4B7E-B1C2-D1B2A097AD9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDC6F6D1-C48E-4B7E-B1C2-D1B2A097AD9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

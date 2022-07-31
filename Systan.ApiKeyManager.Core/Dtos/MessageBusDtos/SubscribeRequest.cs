@@ -8,7 +8,7 @@ namespace Systan.ApiKeyManager.Core.Dtos.MessageBusDtos
 {
     public class SubscribeRequest
     {
-        public string Service { get; set; } = null!;
+        public string ServiceId { get; set; } = null!;
         public string Endpoint { get; set; } = null!;
         public string Subject { get; set; } = null!;
 
